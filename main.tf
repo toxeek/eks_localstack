@@ -1,3 +1,7 @@
+terraform {
+    required_version = ">=0.14.3"
+}
+
 provider "aws" {
   access_key                  = "localstack_access_key"
   region                      = "eu-west-1"
@@ -29,4 +33,26 @@ provider "aws" {
     stepfunctions  = "http://localhost:4566"
     sts            = "http://localhost:4566"
   }
+}
+
+data "aws_caller_identity" "current" {}
+
+# locals, developer and admin users groups for eks cluster
+locals {
+  admin_user_map_users = [
+    for admin_user in var.admin_users :
+    {
+      userarn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${admin_user}"
+      username = admin_user
+      groups   = ["system:masters"]
+    }
+  ]
+  developer_user_map_users = [
+    for developer_user in var.developer_users :
+    {
+      userarn  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/${developer_user}"
+      username = developer_user
+      groups   = ["${var.name_prefix}-developers"]
+    }
+  ]
 }
