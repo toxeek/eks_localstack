@@ -25,7 +25,7 @@ $ make update # not necessary on for 1st run
 $ make plan
 $ make apply
 ```
-As you see above, we use a Makefile and its targets as a wrapper to install the eks infrastructure. The targets of the Makefile are¨:
+As you see above, we use a Makefile and its targets as a wrapper to install the eks infrastructure. The available targets of the Makefile are:
 1. **init**: initialises the tf code
 2. **update**: updates the modules used
 3. **plan**: does a terraform plan outputing to a local .tfstate file
