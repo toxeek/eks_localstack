@@ -3,6 +3,18 @@ variable "account_id" {
     type = "string"
 }
 
+variable "profile" {
+    description = "aws profile to use (this is localstack, so use mock one)"
+    default = "local-test"
+    type = "string"
+}
+
+variable "region" {
+    description "aws region"
+    default = "eu-west-1"
+    type = "string"
+}
+
 variable "is_nat_gw" {
     description = "indicates whether to deploy a nat gw"
     default = true
