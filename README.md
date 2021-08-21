@@ -18,6 +18,12 @@ You'd need to change the **region** and **cluster_name** for your setup.
 In order to install Helm3, follow the notes on its website is really simple.
 
 ## PROVISIONING THE CLUSTER
+FIRST OF ALL, you need to make sure you initialise the workspace, as wqe use terraform workspaces for the different environments, e.g.:
+```bash
+$ terraform workspace select development || terraform workspace new development
+$ terraform workspace select development
+```
+
 To provision this cluster and add ons, remember this is done with localstack and with the special provider for aws we setup to use it (localstack). This should be transparent, so you can safely issue the next commands to have it all running in your localstack mock setup:
 ```bash
 $ git clone https://github.com/toxeek/eks_localstack.git
