@@ -1,3 +1,8 @@
+variable "account_id" {
+    description "aws account id"
+    type = "string"
+}
+
 variable "is_nat_gw" {
     description = "indicates whether to deploy a nat gw"
     default = true
