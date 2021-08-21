@@ -34,3 +34,6 @@ As you see above, we use a Makefile and its targets as a wrapper to install the 
 6. **destroy**: does a terraform destroy of the eks setup
 
 In this case, we create our own vpc, but you can use the terraform remote state, and use an existing vpc (you'll need to change the code). You use remote states whenever you want to run code in existing infrastructure so make as many changes as you like.
+
+## ADD ONS
+
