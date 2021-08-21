@@ -9,3 +9,20 @@ You will need to have the aws-iam-authenticator tool installed in your system, a
 $ sudo curl -o /usr/bin/aws-iam-authenticator https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/darwin/amd64/aws-iam-authenticator && chmod +x /usr/bin/aws-iam-authenticator
 ```
 
+It is now that you can write the local kubeconfig file using for example, the aws cli:
+```bash
+aws eks --region region update-kubeconfig --name cluster_name
+```
+You'd need to change the **region** and **cluster_name** for your setup.
+
+## PROVISIONING THE CLUSTER
+To provision this cluster and add ons, remember this is done with localstack and with the special provider for aws we setup to use it (localstack). This should be transparent, so you can safely issue the next commands to have it all running in your localstack mock setup:
+```bash
+$ git clone https://github.com/toxeek/eks_localstack.git
+$ cd eks_localstack
+$ make init # this is idempotent, you can run init many times
+$ make plan # not necessary on for 1st run
+$ make apply
+```
+As you see above, we use a Makefile and its targets as a wrapper to install the eks infrastructure.
+
