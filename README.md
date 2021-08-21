@@ -21,7 +21,8 @@ To provision this cluster and add ons, remember this is done with localstack and
 $ git clone https://github.com/toxeek/eks_localstack.git
 $ cd eks_localstack
 $ make init # this is idempotent, you can run init many times
-$ make plan # not necessary on for 1st run
+$ make update # not necessary on for 1st run
+$ make plan
 $ make apply
 ```
 As you see above, we use a Makefile and its targets as a wrapper to install the eks infrastructure.
