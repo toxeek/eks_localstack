@@ -1,5 +1,5 @@
 # eks_localstack
-localstack based eks module.
+localstack based eks module. - WE USE TERRAFORM WORKSPACES (tbc) -
 
 ## REQUIREMENTS
 You will need localstack configured with the mock keys and ready to run. As this uses EKS, **YOU WILL NEED TO PURCHASE AT LEAST THE DEVELOPER VERSION OF LOCALSTACK**, which is super cheap, and mocking aws locally rocks. Please refer to the localstack GitHub for installation, etc: [localstack](https://github.com/localstack/localstack)
