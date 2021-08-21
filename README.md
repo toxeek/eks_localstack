@@ -30,4 +30,8 @@ As you see above, we use a Makefile and its targets as a wrapper to install the 
 2. **update**: updates the modules used
 3. **plan**: does a terraform plan outputing to a local .tfstate file
 4. **apply**: applies the tf code in the .tfstate file created by the plan target
+5. **clean**: cleans up the local tf setup (.terraform and .tfstate file)
+6. **destroy**: does a terraform destroy of the eks setup
+
+In this case, we create our own vpc, but you can use the terraform remote state, and use an existing vpc (you'll need to change the code). You use remote states whenever you want to run code in existing infrastrcuture so make as many changes as you like.
 
