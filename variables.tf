@@ -15,12 +15,12 @@ variable "is_internet_ge" {
     type = bool
 }
 
-variable "developers_users" {
+variable "developer_users" {
     description = "list of developers users"
     type = list(string)
 }
 
-variable "admins_users" {
+variable "admin_users" {
     description = "list of admin users"
     type = list(string)
 }
