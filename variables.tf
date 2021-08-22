@@ -42,3 +42,33 @@ variable "name_prefix" {
     type = "string"
     default = "test"
 }
+
+variable "cluster_version" {
+    description = "the eks cluster version to use"
+    type = "string"
+    default = "1.19"
+}
+
+variable "instance_type" {
+    description = "worker nodes instance type"
+    type = "string"
+    default = "m5.large"
+}
+
+variable "asg_desired_capacity" {
+    description = "worker nodes asg desired capacity"
+    type = "string"
+    default = "3"
+}
+
+variable "asg_min_size" {
+    description = "worker nodes asg minimum size"
+    type = "string"
+    default = "3"
+}
+
+variable "asg_max_size" {
+    description = "worker nodes asg maximum size"
+    type = "string"
+    default = "9"
+}

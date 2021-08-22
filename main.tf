@@ -56,6 +56,7 @@ locals {
       groups   = ["${var.name_prefix}-developers"]
     }
   ]
+  cluster_name = "${terraform.workspace}-${var.name_prefix}-eks-cluster"
 }
 
 module "vpc" {
@@ -82,5 +83,35 @@ module "vpc" {
   private_subnet_tags = {
     "kubernetes.io/cluster/${local.cluster_name}" = "shared"
     "kubernetes.io/role/internal-elb"                                                  = "1"
+  }
+}
+
+module "eks" {
+  source                      = "terraform-aws-modules/eks/aws"
+  version                     = "~> 1.9"
+  cluster_name                = local.cluster_name
+  cluster_version             = var.cluster_version
+  subnets                     = module.vpc.private_subnets
+  vpc_id                      = module.vpc.vpc_id
+  enable_irsa                 = true
+  write_kubeconfig            = false
+  cluster_enabled_log_types   = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
+
+  worker_groups = [
+    {
+      instance_type           = var.instance_type
+      asg_desired_capacity    = var.asg_desired_capacity
+      asg_min_size            = var.asg_min_size
+      asg_max_size            = var.asg_max_size
+      tags = [{
+        key                   = "environment"
+        value                 = "${terraform.workspace}"
+        propagate_at_launch   = true
+      }]
+    }
+  ]
+
+  tags = {
+    environment               = "${terraform.workspace}"
   }
 }
