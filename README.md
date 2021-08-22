@@ -44,4 +44,5 @@ As you see above, we use a Makefile and its targets as a wrapper to install the 
 In this case, we create our own vpc, but you can use the terraform remote state, and use an existing vpc (you'll need to change the code). You use remote states whenever you want to run code in existing infrastructure so make as many changes as you like.
 
 ## ADD ONS
-
+For External DNS make sure you have a role named ExternalDnsIAMRole in your aws account. You can find the policies needed for the role online.
+We use helm and the Terraform helm-release resource type to install different charts.
