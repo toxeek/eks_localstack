@@ -175,8 +175,11 @@ resource "aws_iam_policy" "ExternalDnsIAMPolicy" {
 }
 
 resource "null_resource" "add_kubeconfig" {
+  triggers {
+    build_number = "${timestamp()}"
+  }
 
- provisioner "local-exec" {
+  provisioner "local-exec" {
 
     command = "../add-ons/create-kubeconfig.sh $region $cluster_name"
     environment = {
@@ -187,8 +190,11 @@ resource "null_resource" "add_kubeconfig" {
 }
 
 resource "null_resource" "add_alb_ingress" {
+  triggers {
+    build_number = "${timestamp()}"
+  }
 
- provisioner "local-exec" {
+  provisioner "local-exec" {
 
     command = "../add-ons/create-alb-ingress.sh $account"
     environment = {
