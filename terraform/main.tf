@@ -11,7 +11,7 @@ provider "aws" {
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true
   profile                     = var.profile
-  shared_credentials_file = "~/.aws/credentials"
+  shared_credentials_file     = "~/.aws/credentials"
   region                      = var.aws_region
 
   endpoints {
@@ -61,8 +61,6 @@ data "aws_eks_cluster" "cluster" {
 data "aws_eks_cluster_auth" "cluster" {
   name = module.eks-cluster.cluster_id
 }
-
-
 
 # locals, developer and admin users groups for eks cluster
 locals {
@@ -140,5 +138,61 @@ module "eks" {
 
   tags = {
     environment               = "${terraform.workspace}"
+  }
+}
+
+module "ALBIngressControllerIAMRole" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "~> v2.0"
+  create_role                   = true
+  role_name                     = "ALBIngressControllerIAMRole"
+  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns              = [aws_iam_policy.ALBIngressControllerIAMPolicy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:alb-ingress-controller-aws-alb-ingress-controller"]
+}
+
+resource "aws_iam_policy" "ALBIngressControllerIAMPolicy" {
+  name_prefix = "ALBIngessControllerIAMRole"
+  description = "ALB Ingress Controller IAM Policy"
+  policy      = file("templates/iam/AlbIngressControllerIAMPolicy.json")
+}
+
+// external-dns IAM Role
+module "ExternalDnsIAMRole" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "~> v2.0"
+  create_role                   = true
+  role_name                     = "ExternalDnsIAMRole"
+  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns              = [aws_iam_policy.ExternalDnsIAMPolicy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:external-dns"]
+}
+
+resource "aws_iam_policy" "ExternalDnsIAMPolicy" {
+  name_prefix = "ExternalDnsIAMRole"
+  description = "external-dns Controller IAM Policy"
+  policy      = file("templates/iam/ExternalDnsIAMPolicy.json")
+}
+
+resource "null_resource" "add_kubeconfig" {
+
+ provisioner "local-exec" {
+
+    command = "../add-ons/create-kubeconfig.sh $region $cluster_name"
+    environment = {
+      region       = var.region
+      cluster_name =  data.aws_eks_cluster.cluster.name
+    }
+  }
+}
+
+resource "null_resource" "add_alb_ingress" {
+
+ provisioner "local-exec" {
+
+    command = "../add-ons/create-alb-ingress.sh $account"
+    environment = {
+      account = var.account_id
+    }
   }
 }
