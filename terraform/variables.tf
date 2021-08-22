@@ -72,3 +72,8 @@ variable "asg_max_size" {
     type = "string"
     default = "9"
 }
+
+variable "domain" {
+    description = "domain to use with external dns"
+    type = "string"
+}

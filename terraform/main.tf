@@ -181,7 +181,7 @@ resource "null_resource" "add_kubeconfig" {
 
   provisioner "local-exec" {
 
-    command = "chmod +x ../add-ons/create-metrics-server.sh && ../add-ons/create-kubeconfig.sh $region $cluster_name"
+    command = "chmod +x ../add-ons/create-kubeconfig.sh && ../add-ons/create-kubeconfig.sh $region $cluster_name"
     environment = {
       region       = var.region
       cluster_name =  data.aws_eks_cluster.cluster.name
@@ -189,21 +189,21 @@ resource "null_resource" "add_kubeconfig" {
   }
 }
 
-resource "null_resource" "add_alb_ingress" {
+resource "null_resource" "alb_ingress" {
   triggers {
     build_number = "${timestamp()}"
   }
 
   provisioner "local-exec" {
 
-    command = "chmod +x ../add-ons/create-metrics-server.sh && ../add-ons/create-alb-ingress.sh $account"
+    command = "chmod +x ../add-ons/create-alb-ingress.sh && ../add-ons/create-alb-ingress.sh $account"
     environment = {
       account = var.account_id
     }
   }
 }
 
-resource "null_resource" "add_alb_ingress" {
+resource "null_resource" "metrics_server" {
   triggers {
     build_number = "${timestamp()}"
   }
@@ -211,5 +211,31 @@ resource "null_resource" "add_alb_ingress" {
   provisioner "local-exec" {
 
     command = "chmod +x ../add-ons/create-metrics-server.sh && ../add-ons/create-metrics-server.sh"
+  }
+}
+
+resource "null_resource" "metrics_server" {
+  triggers {
+    build_number = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+
+    command = "chmod +x ../add-ons/create-metrics-server.sh && ../add-ons/create-metrics-server.sh"
+  }
+}
+
+resource "null_resource" "external_dns" {
+  triggers {
+    build_number = "${timestamp()}"
+  }
+
+  provisioner "local-exec" {
+
+    command = "chmod +x ../add-ons/create-external-dns.sh && ../add-ons/create-external-dns.sh $domain $accunt"
+    environment = {
+      domain  = var.domain
+      account = var.account_id
+    }
   }
 }
