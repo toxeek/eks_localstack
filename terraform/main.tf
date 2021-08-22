@@ -95,7 +95,7 @@ module "vpc" {
 
 module "eks" {
   source                      = "terraform-aws-modules/eks/aws"
-  version                     = "~> 1.9"
+  version                     = "12.1.0"
   cluster_name                = local.cluster_name
   cluster_version             = var.cluster_version
   subnets                     = module.vpc.private_subnets
@@ -116,6 +116,7 @@ module "eks" {
         propagate_at_launch   = true
       }]
     }
+  map_users = concat(local.admin_user_map_users, local.developer_user_map_users)
   ]
 
   tags = {
